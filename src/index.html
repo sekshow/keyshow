@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>My Electron App</title>
+    <style>
+      body {
+        margin: 0;
+        background: transparent;
+      }
+      #sample-image-left, #sample-image-right {
+        position: fixed;
+        display: none;
+      }
+      #sample-image-left {
+        bottom: 0;
+        left: 0;
+      }
+      #sample-image-right {
+        bottom: 0;
+        right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="../resources/keyball39_left.png" alt="Left Image" id="sample-image-left">
+    <img src="../resources/keyball39_right.png" alt="Right Image" id="sample-image-right">
+
+    <script>
+      const { ipcRenderer } = require('electron');
+
+      function updateImagePositions() {
+        const leftImage = document.getElementById('sample-image-left');
+        const rightImage = document.getElementById('sample-image-right');
+
+        leftImage.style.bottom = '0px';
+        leftImage.style.left = '0px';
+
+        rightImage.style.bottom = '0px';
+        rightImage.style.right = '0px';
+      }
+
+      window.addEventListener('resize', updateImagePositions);
+
+      ipcRenderer.on('toggle-images', (event, show) => {
+        const leftImage = document.getElementById('sample-image-left');
+        const rightImage = document.getElementById('sample-image-right');
+        
+        if (show) {
+          leftImage.style.display = 'block';
+          rightImage.style.display = 'block';
+          updateImagePositions();
+        } else {
+          leftImage.style.display = 'none';
+          rightImage.style.display = 'none';
+        }
+      });
+
+      // 初期ロード時に画像位置を設定
+      window.addEventListener('load', updateImagePositions);
+    </script>
+  </body>
+</html>
